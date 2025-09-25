@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VapeCenter Tiffin Ave - Products</title>
+  <title>VapeCenter Tiffin Ave - Razz Flavors</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     /* Base Styles */
@@ -244,42 +244,85 @@
       animation: fadeInUp 1s ease-out 0.5s both;
     }
 
-    /* Enhanced Products Grid */
-    .product-grid {
-      max-width: 1400px;
-      margin: 0 auto 80px auto;
+    /* Search bar */
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .search-container input {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px 20px;
+      border-radius: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(26, 26, 26, 0.8);
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .search-container input:focus {
+      outline: none;
+      border-color: #008cff;
+      box-shadow: 0 0 20px rgba(0, 140, 255, 0.3);
+    }
+
+    .search-container input::placeholder {
+      color: #aaa;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .tab {
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      padding: 12px 25px;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .tab:hover, .tab.active {
+      background: linear-gradient(45deg, #008cff, #00d4ff);
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 140, 255, 0.3);
+    }
+
+    /* Grid */
+    .flavor-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1400px;
+      margin: 0 auto;
       padding: 0 20px;
     }
 
-    .product-card {
+    .flavor-card {
       background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      color: #fff;
+      padding: 20px;
+      border-radius: 15px;
       text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(255,255,255,0.1);
-      animation: slideInUp 0.8s ease-out;
     }
 
-    @keyframes slideInUp {
-      from {
-        transform: translateY(50px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .product-card::before {
+    .flavor-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -291,37 +334,21 @@
       transition: opacity 0.3s ease;
     }
 
-    .product-card:hover::before {
+    .flavor-card:hover::before {
       opacity: 1;
     }
 
-    .product-card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(0, 140, 255, 0.2);
+    .flavor-card:hover {
+      background: linear-gradient(45deg, #008cff, #00d4ff);
+      color: #000;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 140, 255, 0.3);
       border-color: rgba(0, 140, 255, 0.5);
     }
 
-    .product-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .product-card h3 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-      background: linear-gradient(45deg, #008cff, #00d4ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    /* Hide inactive grids */
+    .flavor-grid.hidden {
+      display: none;
     }
 
     /* Enhanced Footer */
@@ -333,6 +360,7 @@
       font-size: 0.95rem;
       border-top: 1px solid rgba(255,255,255,0.1);
       position: relative;
+      margin-top: 80px;
     }
 
     footer::before {
@@ -353,18 +381,6 @@
       50% {
         opacity: 1;
       }
-    }
-
-    /* Scroll Animation */
-    .scroll-animate {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease;
-    }
-
-    .scroll-animate.animate {
-      opacity: 1;
-      transform: translateY(0);
     }
 
     /* Mobile Navigation */
@@ -456,22 +472,14 @@
         padding: 60px 20px 30px 20px;
       }
 
-      .product-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+      .flavor-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
         padding: 0 15px;
       }
 
-      .product-card {
-        padding: 20px;
-      }
-
-      .product-card img {
-        height: 150px;
-      }
-
-      .product-card h3 {
-        font-size: 1.2rem;
+      .flavor-card {
+        padding: 15px;
       }
     }
 
@@ -488,12 +496,8 @@
         height: 45px;
       }
 
-      .product-card {
-        padding: 15px;
-      }
-
-      .product-card img {
-        height: 120px;
+      .flavor-card {
+        padding: 12px;
       }
     }
 
@@ -508,10 +512,6 @@
 
       .logo-img {
         height: 40px;
-      }
-
-      .product-card img {
-        height: 100px;
       }
     }
   </style>
@@ -528,8 +528,9 @@
     </div>
     <nav class="header-center">
       <a href="index.html">Home</a>
-      <a href="#" style="background: rgba(0, 140, 255, 0.1);">Products</a>
+      <a href="products.html">Products</a>
       <a href="thcaproducts.html">THCA</a>
+      <a href="vapedevices.html">Vape Devices</a>
     </nav>
     <div class="header-right">
       <p><strong>Location:</strong> 2028 Tiffin Ave, Findlay, OH 45840</p>
@@ -540,8 +541,9 @@
     </button>
     <nav class="mobile-nav" id="mobileNav">
       <a href="index.html">Home</a>
-      <a href="#" style="color: #008cff;">Products</a>
+      <a href="products.html">Products</a>
       <a href="thcaproducts.html">THCA Products</a>
+      <a href="vapedevices.html">Vape Devices</a>
       <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
         <p style="color: #ddd; font-size: 0.9rem; margin-bottom: 8px;"><strong>Location:</strong> 2028 Tiffin Ave, Findlay, OH 45840</p>
         <p style="color: #ddd; font-size: 0.9rem;"><strong>Hours:</strong> 8:00 AM - 12:00 AM | Every Day</p>
@@ -550,84 +552,180 @@
   </header>
 
   <!-- Page Title -->
-  <h1 class="page-title scroll-animate">Our Premium Products</h1>
-  <p class="page-subtitle scroll-animate">Discover our carefully curated selection of high-quality vaping and smoking products</p>
+  <h1 class="page-title">Razz Flavors</h1>
+  <p class="page-subtitle">Discover our extensive collection of Razz vape flavors</p>
 
-  <!-- Products Grid -->
-  <div class="product-grid">
-    <div class="product-card scroll-animate">
-      <a href="vapedevices.html" style="display: block; color: inherit;">
-        <img src="vapes.png" alt="Vapes">
-        <h3>Vape Devices</h3>
-        <p>High-quality vaping devices for every experience level</p>
-      </a>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="tobacco.png" alt="Tobacco">
-      <h3>Premium Tobacco</h3>
-      <p>Finest tobacco products and accessories</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="vaporizers.png" alt="Vaporizer">
-      <h3>Vaporizers</h3>
-      <p>Advanced vaporization technology</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="bongs.png" alt="Bong">
-      <h3>Glass Bongs</h3>
-      <p>Premium glass water pipes and accessories</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="detox.png" alt="Detox">
-      <h3>Detox Products</h3>
-      <p>Cleansing and detoxification solutions</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="torches.png" alt="Torch">
-      <h3>Torches & Lighters</h3>
-      <p>Professional-grade heating tools</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="gummies.png" alt="Gummies">
-      <h3>Edible Gummies</h3>
-      <p>Premium edible products and treats</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="grinders.png" alt="Grinder">
-      <h3>Grinders</h3>
-      <p>High-quality grinding accessories</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="ashtray.png" alt="Ashtrays">
-      <h3>Ashtrays</h3>
-      <p>Stylish and functional ashtray collection</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="bangers.png" alt="Bangers">
-      <h3>Bangers</h3>
-      <p>Professional quartz bangers and nails</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="juice.png" alt="Juice">
-      <h3>E-Liquids</h3>
-      <p>Premium vape juice in various flavors</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="coils.png" alt="Coils">
-      <h3>Coils & Atomizers</h3>
-      <p>Replacement coils and atomizer heads</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="rawcones.png" alt="Raw Cones">
-      <h3>Raw Cones</h3>
-      <p>Pre-rolled cones and rolling papers</p>
-    </div>
-        <div class="product-card scroll-animate">
-<img src="tabzs.png" alt=" Hydroxy Tablets">
-       <h3>Hydroxy Tablets</h3>
-       <p>hydroxy tablets for convenient and precise dosing</p>
-    </div>
-  </div>
+<div class="search-container">
+  <input type="text" id="flavor-search" placeholder="Search flavors...">
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-target="fruity">Fruity</div>
+  <div class="tab" data-target="frozen">Frozen</div>
+  <div class="tab" data-target="sour">Sour</div>
+  <div class="tab" data-target="traditional">Traditional</div>
+</div>
+
+<!-- Fruity Flavors -->
+<div class="flavor-grid" id="fruity">
+  <div class="flavor-card">Tiffany</div>
+  <div class="flavor-card">Wintergreen</div>
+  <div class="flavor-card">White Gummy Watermelon</div>
+  <div class="flavor-card">Strawberry Orange Tang</div>
+  <div class="flavor-card">Black Cherry Peach</div>
+  <div class="flavor-card">Watermelon Mango Loco</div>
+  <div class="flavor-card">Rainbow Rain</div>
+  <div class="flavor-card">Strawberry Burst</div>
+  <div class="flavor-card">Strawberry Kiwi Pear</div>
+  <div class="flavor-card">Razzle Dazzle</div>
+  <div class="flavor-card">Blueberry Watermelon</div>
+  <div class="flavor-card">Cherry Strapple</div>
+  <div class="flavor-card">Georgia Peach</div>
+  <div class="flavor-card">Iced Blue Dragon</div>
+  <div class="flavor-card">Miami Mint</div>
+  <div class="flavor-card">Night Crawler</div>
+  <div class="flavor-card">Raspberry Limeade</div>
+  <div class="flavor-card">Sour Apple Watermelon</div>
+  <div class="flavor-card">Sour Watermelon Peach</div>
+  <div class="flavor-card">Strawberry Orange Tang</div>
+  <div class="flavor-card">Watermelon Ice</div>
+</div>
+
+<!-- Frozen Flavors -->
+<div class="flavor-grid hidden" id="frozen">
+  <div class="flavor-card">Frozen Cherry Apple</div>
+  <div class="flavor-card">Frozen Banana</div>
+  <div class="flavor-card">Frozen Dragonfruit Lemon</div>
+  <div class="flavor-card">Frozen Juicy Strawberry</div>
+  <div class="flavor-card">Frozen Raspberry</div>
+</div>
+
+<!-- Sour Flavors -->
+<div class="flavor-grid hidden" id="sour">
+  <div class="flavor-card">Sour Apple Ice</div>
+  <div class="flavor-card">Bangin Sour Berries</div>
+  <div class="flavor-card">Blue Raz Ice</div>
+  <div class="flavor-card">Sour Apple Watermelon</div>
+  <div class="flavor-card">Sour Watermelon Peach</div>
+</div>
+
+<!-- Traditional Flavors -->
+<div class="flavor-grid hidden" id="traditional">
+  <div class="flavor-card">Tobacco</div>
+  <div class="flavor-card">Wintergreen</div>
+  <div class="flavor-card">Clear</div>
+  <div class="flavor-card">Forest Mint</div>
+  <div class="flavor-card">Light Snow Peppermint</div>
+  <div class="flavor-card">Luxury Tobacco</div>
+  <div class="flavor-card">Miami Mint</div>
+  <div class="flavor-card">Pure</div>
+  <div class="flavor-card">Spearmint</div>
+  <div class="flavor-card">Tobacco</div>
+  <div class="flavor-card">Winter Mint</div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const grids = document.querySelectorAll('.flavor-grid');
+  const searchInput = document.getElementById('flavor-search');
+
+  // Tab switching
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const target = tab.dataset.target;
+      grids.forEach(grid => {
+        if(grid.id === target) {
+          grid.classList.remove('hidden');
+        } else {
+          grid.classList.add('hidden');
+        }
+      });
+
+      // Clear search when switching tabs
+      searchInput.value = '';
+      showAllCards();
+    });
+  });
+
+  // Search function
+  searchInput.addEventListener('input', () => {
+    const filter = searchInput.value.toLowerCase();
+
+    grids.forEach(grid => {
+      grid.classList.remove('hidden'); // Show all grids when searching
+      const cards = grid.querySelectorAll('.flavor-card');
+      cards.forEach(card => {
+        if(card.textContent.toLowerCase().includes(filter)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  function showAllCards() {
+    grids.forEach(grid => {
+      const cards = grid.querySelectorAll('.flavor-card');
+      cards.forEach(card => {
+        card.style.display = 'block';
+      });
+    });
+  }
+
+  // Animated background particles
+  function createParticle() {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+    document.querySelector('.bg-particles').appendChild(particle);
+
+    setTimeout(() => {
+      particle.remove();
+    }, 25000);
+  }
+
+  // Create particles
+  setInterval(createParticle, 1000);
+
+  // Mobile menu functionality
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mobileNav = document.getElementById('mobileNav');
+  const mobileNavLinks = mobileNav.querySelectorAll('a');
+
+  if (mobileMenuToggle && mobileNav) {
+    mobileMenuToggle.addEventListener('click', function() {
+      mobileNav.classList.toggle('active');
+      const icon = this.querySelector('i');
+      if (mobileNav.classList.contains('active')) {
+        icon.className = 'fas fa-times';
+      } else {
+        icon.className = 'fas fa-bars';
+      }
+    });
+
+    // Close mobile menu when clicking on a link
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        mobileNav.classList.remove('active');
+        mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
+      });
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!mobileMenuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
+        mobileNav.classList.remove('active');
+        mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
+      }
+    });
+  }
+</script>
 
   <!-- Footer -->
   <footer>
@@ -635,80 +733,5 @@
     <p>Quality products • Expert advice • Exceptional service</p>
   </footer>
 
-  <script>
-    // Animated background particles
-    function createParticle() {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.animationDelay = Math.random() * 15 + 's';
-      particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
-      document.querySelector('.bg-particles').appendChild(particle);
-
-      setTimeout(() => {
-        particle.remove();
-      }, 25000);
-    }
-
-    // Create particles
-    setInterval(createParticle, 1000);
-
-    // Mobile menu functionality
-    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-    const mobileNav = document.getElementById('mobileNav');
-    const mobileNavLinks = mobileNav.querySelectorAll('a');
-
-    if (mobileMenuToggle && mobileNav) {
-      mobileMenuToggle.addEventListener('click', function() {
-        mobileNav.classList.toggle('active');
-        const icon = this.querySelector('i');
-        if (mobileNav.classList.contains('active')) {
-          icon.className = 'fas fa-times';
-        } else {
-          icon.className = 'fas fa-bars';
-        }
-      });
-
-      // Close mobile menu when clicking on a link
-      mobileNavLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          mobileNav.classList.remove('active');
-          mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
-        });
-      });
-
-      // Close mobile menu when clicking outside
-      document.addEventListener('click', function(e) {
-        if (!mobileMenuToggle.contains(e.target) && !mobileNav.contains(e.target)) {
-          mobileNav.classList.remove('active');
-          mobileMenuToggle.querySelector('i').className = 'fas fa-bars';
-        }
-      });
-    }
-
-    // Scroll animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate');
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.scroll-animate').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Stagger product card animations
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach((card, index) => {
-      card.style.animationDelay = `${index * 0.1}s`;
-    });
-  </script>
 </body>
 </html>
