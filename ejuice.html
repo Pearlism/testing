@@ -452,14 +452,24 @@
         position: relative;
       }
 
+      .header-left {
+        flex: 1;
+      }
+
+      .store-name {
+        font-size: 1.4rem;
+      }
+
+      .logo-img {
+        height: 50px;
+      }
+
       .header-center {
         display: none;
       }
 
       .header-right {
-        flex-direction: row;
-        align-items: center;
-        gap: 15px;
+        display: none;
       }
 
       .mobile-menu-toggle {
@@ -471,6 +481,12 @@
         padding: 60px 20px 30px 20px;
       }
 
+      .page-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        padding: 0 20px;
+      }
+
       .categories-grid {
         grid-template-columns: 1fr;
         gap: 20px;
@@ -479,6 +495,14 @@
 
       .category-card {
         padding: 25px 20px;
+      }
+
+      .category-card h3 {
+        font-size: 1.8rem;
+      }
+
+      .category-card p {
+        font-size: 1rem;
       }
 
       .flavors-grid {
@@ -499,8 +523,17 @@
       }
 
       .page-subtitle {
-        font-size: 1.1rem;
-        margin-bottom: 40px;
+        font-size: 1rem;
+        margin-bottom: 30px;
+        padding: 0 15px;
+      }
+
+      .store-name {
+        font-size: 1.2rem;
+      }
+
+      .logo-img {
+        height: 45px;
       }
 
       .categories-grid {
@@ -511,6 +544,14 @@
         padding: 20px 15px;
       }
 
+      .category-card h3 {
+        font-size: 1.6rem;
+      }
+
+      .category-card p {
+        font-size: 0.95rem;
+      }
+
       .flavors-grid {
         grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
         gap: 6px;
@@ -519,6 +560,53 @@
       .flavor-item {
         padding: 8px 4px;
         font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .page-title {
+        font-size: 1.8rem;
+        padding: 40px 10px 20px 10px;
+      }
+
+      .page-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+        padding: 0 10px;
+      }
+
+      .store-name {
+        font-size: 1.1rem;
+      }
+
+      .logo-img {
+        height: 40px;
+      }
+
+      .categories-grid {
+        padding: 0 5px;
+      }
+
+      .category-card {
+        padding: 15px 10px;
+      }
+
+      .category-card h3 {
+        font-size: 1.4rem;
+      }
+
+      .category-card p {
+        font-size: 0.9rem;
+      }
+
+      .flavors-grid {
+        grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+        gap: 4px;
+      }
+
+      .flavor-item {
+        padding: 6px 3px;
+        font-size: 0.75rem;
       }
     }
   </style>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VapeCenter Tiffin Ave - Products</title>
+  <title>VapeCenter Tiffin Ave - Vaporizers</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     /* Base Styles */
@@ -244,17 +244,17 @@
       animation: fadeInUp 1s ease-out 0.5s both;
     }
 
-    /* Enhanced Products Grid */
-    .product-grid {
+    /* Enhanced Categories Grid */
+    .categories-grid {
       max-width: 1400px;
       margin: 0 auto 80px auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
       gap: 30px;
       padding: 0 20px;
     }
 
-    .product-card {
+    .category-card {
       background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
       padding: 30px;
       border-radius: 20px;
@@ -279,7 +279,7 @@
       }
     }
 
-    .product-card::before {
+    .category-card::before {
       content: '';
       position: absolute;
       top: 0;
@@ -291,37 +291,98 @@
       transition: opacity 0.3s ease;
     }
 
-    .product-card:hover::before {
+    .category-card:hover::before {
       opacity: 1;
     }
 
-    .product-card:hover {
+    .category-card:hover {
       transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 20px 50px rgba(0, 140, 255, 0.2);
-      border-color: rgba(0, 140, 255, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 140, 255, 0.2);
     }
 
-    .product-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .product-card:hover img {
-      transform: scale(1.05);
-    }
-
-    .product-card h3 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 10px;
+    .category-card h3 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
       background: linear-gradient(45deg, #008cff, #00d4ff);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      font-weight: 700;
+    }
+
+    .category-card p {
+      color: #aaa;
+      margin-bottom: 25px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .product-item {
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 140, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .product-item:hover::before {
+      left: 100%;
+    }
+
+    .product-item:hover {
+      background: linear-gradient(145deg, #008cff, #00d4ff);
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 140, 255, 0.4);
+      color: #fff;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .product-item:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .product-type {
+      font-size: 0.9rem;
+      color: #aaa;
+      font-weight: 500;
     }
 
     /* Enhanced Footer */
@@ -347,24 +408,13 @@
     }
 
     @keyframes gradientShift {
-      0%, 100% {
-        opacity: 0.5;
-      }
-      50% {
-        opacity: 1;
-      }
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
 
-    /* Scroll Animation */
-    .scroll-animate {
-      opacity: 0;
-      transform: translateY(50px);
-      transition: all 0.8s ease;
-    }
-
-    .scroll-animate.animate {
-      opacity: 1;
-      transform: translateY(0);
+    footer p {
+      margin: 5px 0;
+      color: #ddd;
     }
 
     /* Mobile Navigation */
@@ -456,28 +506,62 @@
         padding: 60px 20px 30px 20px;
       }
 
-      .product-grid {
+      .page-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 40px;
+        padding: 0 20px;
+      }
+
+      .categories-grid {
         grid-template-columns: 1fr;
         gap: 20px;
         padding: 0 15px;
       }
 
-      .product-card {
-        padding: 20px;
+      .category-card {
+        padding: 25px 20px;
       }
 
-      .product-card img {
-        height: 150px;
+      .category-card h3 {
+        font-size: 1.8rem;
       }
 
-      .product-card h3 {
-        font-size: 1.2rem;
+      .category-card p {
+        font-size: 1rem;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .product-item {
+        padding: 15px;
+      }
+
+      .product-image {
+        height: 120px;
+      }
+
+      .product-name {
+        font-size: 1rem;
+      }
+
+      .product-type {
+        font-size: 0.85rem;
       }
     }
 
     @media (max-width: 480px) {
       .page-title {
         font-size: 2rem;
+        padding: 50px 15px 25px 15px;
+      }
+
+      .page-subtitle {
+        font-size: 1rem;
+        margin-bottom: 30px;
+        padding: 0 15px;
       }
 
       .store-name {
@@ -488,18 +572,54 @@
         height: 45px;
       }
 
-      .product-card {
-        padding: 15px;
+      .categories-grid {
+        padding: 0 10px;
       }
 
-      .product-card img {
-        height: 120px;
+      .category-card {
+        padding: 20px 15px;
+      }
+
+      .category-card h3 {
+        font-size: 1.6rem;
+      }
+
+      .category-card p {
+        font-size: 0.95rem;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+
+      .product-item {
+        padding: 12px;
+      }
+
+      .product-image {
+        height: 100px;
+      }
+
+      .product-name {
+        font-size: 0.9rem;
+      }
+
+      .product-type {
+        font-size: 0.8rem;
       }
     }
 
     @media (max-width: 360px) {
       .page-title {
         font-size: 1.8rem;
+        padding: 40px 10px 20px 10px;
+      }
+
+      .page-subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+        padding: 0 10px;
       }
 
       .store-name {
@@ -510,29 +630,63 @@
         height: 40px;
       }
 
-      .product-card img {
-        height: 100px;
+      .categories-grid {
+        padding: 0 5px;
+      }
+
+      .category-card {
+        padding: 15px 10px;
+      }
+
+      .category-card h3 {
+        font-size: 1.4rem;
+      }
+
+      .category-card p {
+        font-size: 0.9rem;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 8px;
+      }
+
+      .product-item {
+        padding: 10px;
+      }
+
+      .product-image {
+        height: 80px;
+      }
+
+      .product-name {
+        font-size: 0.8rem;
+      }
+
+      .product-type {
+        font-size: 0.75rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Animated Background Particles -->
   <div class="bg-particles"></div>
 
-  <!-- Header -->
   <header>
     <div class="header-left">
       <img src="logonobackground.png" alt="VapeCenter Logo" class="logo-img">
-      <span class="store-name">VapeCenter Tiffin Ave</span>
+      <div class="store-name">VapeCenter</div>
     </div>
-    <nav class="header-center">
+    <div class="header-center">
       <a href="index.html">Home</a>
-      <a href="#" style="background: rgba(0, 140, 255, 0.1);">Products</a>
-      <a href="thcaproducts.html">THCA</a>
-    </nav>
+      <a href="products.html">Products</a>
+      <a href="thcaproducts.html">THCA Products</a>
+      <a href="vapedevices.html">Vape Devices</a>
+      <a href="ejuice.html">E-Liquid</a>
+      <a href="vaporizers.html" style="color: #008cff;">Vaporizers</a>
+    </div>
     <div class="header-right">
-      <p><strong>Location:</strong> 2028 Tiffin Ave, Findlay, OH 45840</p>
+      <div><strong>Location:</strong> 2028 Tiffin Ave, Findlay, OH 45840</div>
       <p><strong>Hours:</strong> 8:00 AM - 12:00 AM | Every Day</p>
     </div>
     <button class="mobile-menu-toggle" id="mobileMenuToggle">
@@ -540,8 +694,11 @@
     </button>
     <nav class="mobile-nav" id="mobileNav">
       <a href="index.html">Home</a>
-      <a href="#" style="color: #008cff;">Products</a>
+      <a href="products.html">Products</a>
       <a href="thcaproducts.html">THCA Products</a>
+      <a href="vapedevices.html">Vape Devices</a>
+      <a href="ejuice.html">E-Liquid</a>
+      <a href="vaporizers.html" style="color: #008cff;">Vaporizers</a>
       <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
         <p style="color: #ddd; font-size: 0.9rem; margin-bottom: 8px;"><strong>Location:</strong> 2028 Tiffin Ave, Findlay, OH 45840</p>
         <p style="color: #ddd; font-size: 0.9rem;"><strong>Hours:</strong> 8:00 AM - 12:00 AM | Every Day</p>
@@ -549,83 +706,137 @@
     </nav>
   </header>
 
-  <!-- Page Title -->
-  <h1 class="page-title scroll-animate">Our Premium Products</h1>
-  <p class="page-subtitle scroll-animate">Discover our carefully curated selection of high-quality vaping and smoking products</p>
+  <h1 class="page-title">Vaporizers</h1>
+  <p class="page-subtitle">Premium dry herb and dab vaporizers for the ultimate experience</p>
 
-  <!-- Products Grid -->
-  <div class="product-grid">
-    <div class="product-card scroll-animate">
-      <a href="vapedevices.html" style="display: block; color: inherit;">
-        <img src="vapes.png" alt="Vapes">
-        <h3>Vape Devices</h3>
-        <p>High-quality vaping devices for every experience level</p>
-      </a>
+  <div class="categories-grid">
+    <div class="category-card">
+      <h3>Dry Herb Vaporizers</h3>
+      <p>Portable and desktop vaporizers designed for dry herb consumption</p>
+      <div class="products-grid">
+        <div class="product-item">
+          <img src="venty.png" alt="Venty" class="product-image">
+          <div class="product-name">Venty</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="crafty plus.png" alt="Crafty Plus" class="product-image">
+          <div class="product-name">Crafty Plus</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="davinci iq3.png" alt="Davinci IQ3" class="product-image">
+          <div class="product-name">Davinci IQ3</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="potv lobo.png" alt="POTV Lobo" class="product-image">
+          <div class="product-name">POTV Lobo</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="tafeebowle2.png" alt="Tafee Bowle 2.0" class="product-image">
+          <div class="product-name">Tafee Bowle 2.0</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="mighty plus.png" alt="Mighty Plus" class="product-image">
+          <div class="product-name">Mighty Plus</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+        <div class="product-item">
+          <img src="arizersolo3.png" alt="Arizer Solo 3" class="product-image">
+          <div class="product-name">Arizer Solo 3</div>
+          <div class="product-type">Dry Herb</div>
+        </div>
+      </div>
     </div>
-    <div class="product-card scroll-animate">
-      <img src="tobacco.png" alt="Tobacco">
-      <h3>Premium Tobacco</h3>
-      <p>Finest tobacco products and accessories</p>
-    </div>
-    <a href="vaporizers.html" class="product-card scroll-animate">
-      <img src="vaporizers.png" alt="Vaporizer">
-      <h3>Vaporizers</h3>
-      <p>Advanced vaporization technology</p>
-    </a>
-    <div class="product-card scroll-animate">
-      <img src="bongs.png" alt="Bong">
-      <h3>Glass Bongs</h3>
-      <p>Premium glass water pipes and accessories</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="detox.png" alt="Detox">
-      <h3>Detox Products</h3>
-      <p>Cleansing and detoxification solutions</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="torches.png" alt="Torch">
-      <h3>Torches & Lighters</h3>
-      <p>Professional-grade heating tools</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="thcagummies.png" alt="Gummies">
-      <h3>Edible Gummies</h3>
-      <p>Premium edible products and treats</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="grinders.png" alt="Grinder">
-      <h3>Grinders</h3>
-      <p>High-quality grinding accessories</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="ashtray.png" alt="Ashtrays">
-      <h3>Ashtrays</h3>
-      <p>Stylish and functional ashtray collection</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="bangers.png" alt="Bangers">
-      <h3>Bangers</h3>
-      <p>Professional quartz bangers and nails</p>
-    </div>
-    <a href="ejuice.html" class="product-card scroll-animate">
-      <img src="juice.png" alt="Juice">
-      <h3>E-Liquids</h3>
-      <p>Premium vape juice in various flavors</p>
-    </a>
-    <div class="product-card scroll-animate">
-      <img src="coils.png" alt="Coils">
-      <h3>Coils & Atomizers</h3>
-      <p>Replacement coils and atomizer heads</p>
-    </div>
-    <div class="product-card scroll-animate">
-      <img src="rawcones.png" alt="Raw Cones">
-      <h3>Raw Cones</h3>
-      <p>Pre-rolled cones and rolling papers</p>
-    </div>
-        <div class="product-card scroll-animate">
-<img src="tabzs.png" alt=" Hydroxy Tablets">
-       <h3>Hydroxy Tablets</h3>
-       <p>hydroxy tablets for convenient and precise dosing</p>
+
+    <div class="category-card">
+      <h3>Dab Vaporizers</h3>
+      <p>Electric nectar collectors and dab rigs for concentrate consumption</p>
+      <div class="products-grid">
+        <div class="product-item">
+          <img src="Unicorn 2.0.png" alt="Unicorn 2.0" class="product-image">
+          <div class="product-name">Unicorn 2.0</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="unicorn mini.png" alt="Unicorn Mini" class="product-image">
+          <div class="product-name">Unicorn Mini</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="dragon egg.png" alt="Dragon Egg" class="product-image">
+          <div class="product-name">Dragon Egg</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="dinosaur.png" alt="Dinosaur" class="product-image">
+          <div class="product-name">Dinosaur</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="octopus mini.png" alt="Octopus Mini" class="product-image">
+          <div class="product-name">Octopus Mini</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="electricnectarcollectors.png" alt="Electric Nectar Collectors" class="product-image">
+          <div class="product-name">Electric Nectar Collectors</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="seahorseseries.png" alt="Seahorse Series" class="product-image">
+          <div class="product-name">Seahorse Series</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="seahorseproplus.png" alt="Seahorse Pro Plus" class="product-image">
+          <div class="product-name">Seahorse Pro Plus</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="Seahorse2.0.png" alt="Seahorse 2.0" class="product-image">
+          <div class="product-name">Seahorse 2.0</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="seahorseking.png" alt="Seahorse King" class="product-image">
+          <div class="product-name">Seahorse King</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="giraffe.png" alt="Giraffe" class="product-image">
+          <div class="product-name">Giraffe</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="whale.png" alt="Whale" class="product-image">
+          <div class="product-name">Whale</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="seahorsequeen.png" alt="Seahorse Queen" class="product-image">
+          <div class="product-name">Seahorse Queen</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="peakpro.png" alt="Peak Pro" class="product-image">
+          <div class="product-name">Peak Pro</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="peak.png" alt="Peak" class="product-image">
+          <div class="product-name">Peak</div>
+          <div class="product-type">Dab</div>
+        </div>
+        <div class="product-item">
+          <img src="proxy.png" alt="Proxy" class="product-image">
+          <div class="product-name">Proxy</div>
+          <div class="product-type">Dab</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -644,14 +855,12 @@
       particle.style.animationDelay = Math.random() * 15 + 's';
       particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
       document.querySelector('.bg-particles').appendChild(particle);
-
-      setTimeout(() => {
-        particle.remove();
-      }, 25000);
     }
 
     // Create particles
-    setInterval(createParticle, 1000);
+    for (let i = 0; i < 30; i++) {
+      setTimeout(createParticle, i * 200);
+    }
 
     // Mobile menu functionality
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -685,30 +894,6 @@
         }
       });
     }
-
-    // Scroll animations
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate');
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.scroll-animate').forEach(el => {
-      observer.observe(el);
-    });
-
-    // Stagger product card animations
-    const productCards = document.querySelectorAll('.product-card');
-    productCards.forEach((card, index) => {
-      card.style.animationDelay = `${index * 0.1}s`;
-    });
   </script>
 </body>
 </html>
