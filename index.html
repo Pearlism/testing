@@ -29,6 +29,279 @@
       color: inherit;
     }
 
+    /* Age Verification Popup */
+    .age-verification-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      border: 2px solid #ff4444;
+      border-radius: 20px;
+      padding: 40px 50px;
+      text-align: center;
+      z-index: 10001;
+      box-shadow: 0 20px 60px rgba(255, 68, 68, 0.3);
+      backdrop-filter: blur(20px);
+      animation: popupSlideIn 0.5s ease-out;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    .age-verification-popup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255, 68, 68, 0.1), rgba(255, 100, 100, 0.1));
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    .age-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #ff4444, #ff6666);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .age-message {
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    .age-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .age-yes-btn {
+      background: linear-gradient(45deg, #00aa00, #00cc00);
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      min-width: 120px;
+    }
+
+    .age-yes-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 170, 0, 0.4);
+    }
+
+    .age-no-btn {
+      background: linear-gradient(45deg, #ff4444, #ff6666);
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+      min-width: 120px;
+    }
+
+    .age-no-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(255, 68, 68, 0.4);
+    }
+
+    .age-warning {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      border: 2px solid #ff4444;
+      border-radius: 20px;
+      padding: 40px 50px;
+      text-align: center;
+      z-index: 10002;
+      box-shadow: 0 20px 60px rgba(255, 68, 68, 0.3);
+      backdrop-filter: blur(20px);
+      animation: popupSlideIn 0.5s ease-out;
+      max-width: 500px;
+      width: 90%;
+      display: none;
+    }
+
+    .age-warning-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #ff4444;
+      margin-bottom: 20px;
+    }
+
+    .age-warning-message {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 25px;
+      line-height: 1.4;
+    }
+
+    .age-warning-close {
+      background: linear-gradient(45deg, #ff4444, #ff6666);
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .age-warning-close:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 68, 68, 0.3);
+    }
+
+    .blur-background {
+      filter: blur(5px);
+      pointer-events: none;
+    }
+
+    .age-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 10000;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    /* Announcement Popup */
+    .announcement-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+      border: 2px solid #008cff;
+      border-radius: 20px;
+      padding: 30px 40px;
+      text-align: center;
+      z-index: 10000;
+      box-shadow: 0 20px 60px rgba(0, 140, 255, 0.3);
+      backdrop-filter: blur(20px);
+      animation: popupSlideIn 0.5s ease-out;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .announcement-popup::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(0, 140, 255, 0.1), rgba(0, 212, 255, 0.1));
+      border-radius: 18px;
+      z-index: -1;
+    }
+
+    @keyframes popupSlideIn {
+      from {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .announcement-popup.hide {
+      animation: popupSlideOut 0.5s ease-in forwards;
+    }
+
+    @keyframes popupSlideOut {
+      from {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    .announcement-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #008cff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .announcement-message {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .announcement-days {
+      font-size: 1rem;
+      color: #00d4ff;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .announcement-close {
+      background: linear-gradient(45deg, #008cff, #00d4ff);
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .announcement-close:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 140, 255, 0.3);
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
     /* Animated Background Particles */
     .bg-particles {
       position: fixed;
@@ -811,6 +1084,33 @@
   </style>
 </head>
 <body>
+  <!-- Age Verification Popup -->
+  <div class="age-overlay" id="ageOverlay"></div>
+  <div class="age-verification-popup" id="ageVerificationPopup">
+    <div class="age-title">🔞 AGE VERIFICATION 🔞</div>
+    <div class="age-message">You must be 21 years or older to enter this website.<br>Are you 21 years of age or older?</div>
+    <div class="age-buttons">
+      <button class="age-yes-btn" onclick="verifyAge(true)">Yes, I am 21+</button>
+      <button class="age-no-btn" onclick="verifyAge(false)">No, I am under 21</button>
+    </div>
+  </div>
+
+  <!-- Age Warning Popup -->
+  <div class="age-warning" id="ageWarning">
+    <div class="age-warning-title">⚠️ ACCESS DENIED ⚠️</div>
+    <div class="age-warning-message">You must be 21 years or older to access this website.<br>Please come back when you are of legal age.</div>
+    <button class="age-warning-close" onclick="closeAgeWarning()">Understood</button>
+  </div>
+
+  <!-- Announcement Popup -->
+  <div class="popup-overlay" id="popupOverlay" style="display: none;"></div>
+  <div class="announcement-popup" id="announcementPopup" style="display: none;">
+    <div class="announcement-title">🎉 SPECIAL OFFER! 🎉</div>
+    <div class="announcement-message">Buy 1 Get the 2nd 40% Off</div>
+    <div class="announcement-days">Every Thursday & Friday on All Vapes</div>
+    <button class="announcement-close" onclick="closeAnnouncement()">Got It!</button>
+  </div>
+
   <div class="bg-particles"></div>
   <header>
     <div class="header-left">
@@ -893,6 +1193,73 @@
   </footer>
 
   <script>
+    // Age Verification Functionality
+    function verifyAge(isOfAge) {
+      const agePopup = document.getElementById('ageVerificationPopup');
+      const ageOverlay = document.getElementById('ageOverlay');
+      const ageWarning = document.getElementById('ageWarning');
+      const body = document.body;
+      
+      if (isOfAge) {
+        // User is 21+, hide age verification and show announcement
+        agePopup.style.display = 'none';
+        ageOverlay.style.display = 'none';
+        body.classList.remove('blur-background');
+        
+        // Show announcement popup after age verification
+        setTimeout(() => {
+          showAnnouncement();
+        }, 500);
+      } else {
+        // User is under 21, show warning
+        agePopup.style.display = 'none';
+        ageWarning.style.display = 'block';
+        body.classList.add('blur-background');
+      }
+    }
+
+    function closeAgeWarning() {
+      const ageWarning = document.getElementById('ageWarning');
+      const ageOverlay = document.getElementById('ageOverlay');
+      const body = document.body;
+      
+      ageWarning.style.display = 'none';
+      ageOverlay.style.display = 'none';
+      body.classList.remove('blur-background');
+      
+      // Redirect to a safe page or show age verification again
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
+
+    function showAnnouncement() {
+      const announcementPopup = document.getElementById('announcementPopup');
+      const popupOverlay = document.getElementById('popupOverlay');
+      
+      announcementPopup.style.display = 'block';
+      popupOverlay.style.display = 'block';
+      
+      // Auto-hide announcement after 10 seconds
+      setTimeout(() => {
+        closeAnnouncement();
+      }, 10000);
+    }
+
+    // Announcement Popup Functionality
+    function closeAnnouncement() {
+      const popup = document.getElementById('announcementPopup');
+      const overlay = document.getElementById('popupOverlay');
+      
+      popup.classList.add('hide');
+      overlay.style.opacity = '0';
+      
+      setTimeout(() => {
+        popup.style.display = 'none';
+        overlay.style.display = 'none';
+      }, 500);
+    }
+
     // Enhanced slideshow with better transitions
     document.addEventListener('DOMContentLoaded', function() {
       const slides = document.querySelectorAll('.hero-slideshow img');
