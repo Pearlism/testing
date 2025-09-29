@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VapeCenter - Top Shelf Menu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #008cff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.3));
+            }
+            to {
+                filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+            }
+        }
+
+        .header p {
+            font-size: 1rem;
+            color: #aaa;
+            font-weight: 300;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            flex: 1;
+        }
+
+        .product-card {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 12px;
+            padding: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.1), rgba(0, 140, 255, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 212, 255, 0.3);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 3px;
+            background: linear-gradient(45deg, #00d4ff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #00d4ff;
+            margin-bottom: 3px;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+        }
+
+        .price-breakdown {
+            font-size: 0.8rem;
+            color: #bbb;
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+
+        .product-details {
+            font-size: 0.8rem;
+            color: #aaa;
+            line-height: 1.2;
+            font-weight: 500;
+        }
+
+        .strain-type {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 3px;
+        }
+
+        .strain-type.hybrid {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: #fff;
+        }
+
+        .strain-type.indica {
+            background: linear-gradient(45deg, #8b5cf6, #a855f7);
+            color: #fff;
+        }
+
+        .strain-type.sativa {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            color: #fff;
+        }
+
+        .strain-type.indica-hybrid {
+            background: linear-gradient(45deg, #8b5cf6, #f7931e);
+            color: #fff;
+        }
+
+        .strain-type.sativa-hybrid {
+            background: linear-gradient(45deg, #10b981, #f7931e);
+            color: #fff;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 15px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                height: 120px;
+            }
+
+            .product-name {
+                font-size: 1.1rem;
+            }
+
+            .product-price {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 12px;
+            }
+
+            .product-card {
+                padding: 12px;
+            }
+
+            .product-image {
+                height: 100px;
+            }
+
+            .product-name {
+                font-size: 1rem;
+            }
+
+            .product-price {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VapeCenter - Top Shelf Menu</h1>
+            <p> </p>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="jokerscandy.png" alt="Jokerz Candy" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Jokerz Candy</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Hybrid 32%</div>
+                    <span class="strain-type hybrid">Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="pop41.png" alt="Pop 41" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Pop 41</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Hybrid 30%</div>
+                    <span class="strain-type hybrid">Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="tropruntz.png" alt="Troprunts" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Troprunts</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Sativa Hybrid QP 31%</div>
+                    <span class="strain-type sativa-hybrid">Sativa Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="gelatocake.png" alt="Gelato Cake" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Gelato Cake</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Indica QP 35%</div>
+                    <span class="strain-type indica">Indica</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="larrymac.png" alt="Larry Mac" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Larry Mac</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Hybrid QP 28%</div>
+                    <span class="strain-type hybrid">Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="macdaddy.png" alt="Mac Daddy" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Mac Daddy</h3>
+                    <div class="product-price">$24.99</div>
+                    <div class="price-breakdown">7g: $44.99 | 1/2oz: $79.99 | 1oz: $124.99</div>
+                    <div class="product-details">Sativa Hybrid QP 29%</div>
+                    <span class="strain-type sativa-hybrid">Sativa Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="oreoblizzard.png" alt="Oreo Blizzard" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Oreo Blizzard</h3>
+                    <div class="product-price">$29.99</div>
+                    <div class="price-breakdown">7g: $50 | 1/2oz: $84.99 | 1oz: $134.99</div>
+                    <div class="product-details">Indica</div>
+                    <span class="strain-type indica">Indica</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="headbands.png" alt="Headband X Red Velvet" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Headband X Red Velvet</h3>
+                    <div class="product-price">$29.99</div>
+                    <div class="price-breakdown">7g: $50 | 1/2oz: $84.99 | 1oz: $134.99</div>
+                    <div class="product-details">Indica Hybrid</div>
+                    <span class="strain-type indica-hybrid">Indica Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="jackie.png" alt="Jackie Robinson" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Jackie Robinson</h3>
+                    <div class="product-price">$29.99</div>
+                    <div class="price-breakdown">7g: $50 | 1/2oz: $84.99 | 1oz: $134.99</div>
+                    <div class="product-details">Indica Hybrid</div>
+                    <span class="strain-type indica-hybrid">Indica Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="boloruntz.png" alt="Bolo Runtz" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Bolo Runtz</h3>
+                    <div class="product-price">$29.99</div>
+                    <div class="price-breakdown">7g: $50 | 1/2oz: $84.99 | 1oz: $134.99</div>
+                    <div class="product-details">Indica Hybrid</div>
+                    <span class="strain-type indica-hybrid">Indica Hybrid</span>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="purpleruntz.png" alt="Purple Runtz" class="product-image">
+                <div class="product-info">
+                    <h3 class="product-name">Purple Runtz</h3>
+                    <div class="product-price">$29.99</div>
+                    <div class="price-breakdown">7g: $50 | 1/2oz: $84.99 | 1oz: $134.99</div>
+                    <div class="product-details">Indica 34%</div>
+                    <span class="strain-type indica">Indica</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "vapestore-website",
+  "version": "1.0.0",
+  "description": "VapeCenter Tiffin Ave - Vape Store Website",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site - no build needed'",
+    "start": "echo 'Static site - serve with any static server'"
+  },
+  "keywords": [
+    "vape",
+    "store",
+    "website",
+    "e-commerce"
+  ],
+  "author": "VapeCenter Tiffin Ave",
+  "license": "MIT",
+  "devDependencies": {
+    "vercel": "^32.0.0"
+  }
+}

@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VapeCenter - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a0a0a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #008cff, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #aaa;
+        }
+
+        .admin-card {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #aaa;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00d4ff, #008cff);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-right: 15px;
+            margin-bottom: 15px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #666, #888);
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 20px rgba(136, 136, 136, 0.3);
+        }
+
+        .current-settings {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .current-settings h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .setting-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .setting-label {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .setting-value {
+            color: #aaa;
+        }
+
+        .success-message {
+            background: linear-gradient(45deg, #10b981, #34d399);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: linear-gradient(45deg, #ef4444, #f87171);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .preview-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .preview-section h3 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .preview-popup {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .preview-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #008cff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-message {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-days {
+            font-size: 0.9rem;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-button {
+            background: linear-gradient(45deg, #008cff, #00d4ff);
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .admin-card {
+                padding: 20px;
+            }
+
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Admin Panel</h1>
+            <p>Manage your website announcements</p>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i> Announcement updated successfully!
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-circle"></i> Error updating announcement. Please try again.
+        </div>
+
+        <div class="current-settings">
+            <h3><i class="fas fa-info-circle"></i> Current Announcement Settings</h3>
+            <div class="setting-item">
+                <div class="setting-label">Title:</div>
+                <div class="setting-value" id="currentTitle">Loading...</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">Message:</div>
+                <div class="setting-value" id="currentMessage">Loading...</div>
+            </div>
+            <div class="setting-item">
+                <div class="setting-label">Days:</div>
+                <div class="setting-value" id="currentDays">Loading...</div>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3><i class="fas fa-edit"></i> Update Announcement</h3>
+            <form id="announcementForm">
+                <div class="form-group">
+                    <label for="title">Announcement Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter announcement title (e.g., 🎉 SPECIAL OFFER! 🎉)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Announcement Message</label>
+                    <input type="text" id="message" name="message" placeholder="Enter main message (e.g., Buy 1 Get the 2nd 40% Off)" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="days">Days/Details</label>
+                    <textarea id="days" name="days" placeholder="Enter additional details (e.g., Every Thursday & Friday on All Vapes)" required></textarea>
+                </div>
+
+                <button type="submit" class="btn">
+                    <i class="fas fa-save"></i> Update Announcement
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                    <i class="fas fa-undo"></i> Reset Form
+                </button>
+            </form>
+        </div>
+
+        <div class="preview-section">
+            <h3><i class="fas fa-eye"></i> Preview</h3>
+            <div class="preview-popup">
+                <div class="preview-title" id="previewTitle">🎉 SPECIAL OFFER! 🎉</div>
+                <div class="preview-message" id="previewMessage">Buy 1 Get the 2nd 40% Off</div>
+                <div class="preview-days" id="previewDays">Every Thursday & Friday on All Vapes</div>
+                <button class="preview-button">Got It!</button>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3><i class="fas fa-info-circle"></i> How to Update Your Website</h3>
+            <div style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
+                <h4 style="color: #00d4ff; margin-bottom: 15px;">📋 Steps to Update Your Announcement:</h4>
+                <ol style="color: #fff; line-height: 1.6; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;">Fill out the form above with your new announcement</li>
+                    <li style="margin-bottom: 8px;">Click "Update Announcement" to download the admin.json file</li>
+                    <li style="margin-bottom: 8px;">Go to your GitHub repository</li>
+                    <li style="margin-bottom: 8px;">Upload the downloaded admin.json file (replace the existing one)</li>
+                    <li style="margin-bottom: 8px;">Commit and push the changes</li>
+                    <li>Your website will automatically update within a few minutes!</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h3><i class="fas fa-tools"></i> Quick Actions</h3>
+            <button class="btn" onclick="goToWebsite()">
+                <i class="fas fa-external-link-alt"></i> View Website
+            </button>
+            <button class="btn btn-secondary" onclick="clearAnnouncement()">
+                <i class="fas fa-trash"></i> Clear Announcement
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Load current announcement settings from JSON file
+        async function loadCurrentSettings() {
+            try {
+                const response = await fetch('admin.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('currentTitle').textContent = data.title || 'No title set';
+                    document.getElementById('currentMessage').textContent = data.message || 'No message set';
+                    document.getElementById('currentDays').textContent = data.days || 'No days set';
+                    
+                    // Fill form with current data
+                    document.getElementById('title').value = data.title || '';
+                    document.getElementById('message').value = data.message || '';
+                    document.getElementById('days').value = data.days || '';
+                    
+                    // Update preview
+                    updatePreview();
+                } else {
+                    throw new Error('Failed to load admin.json');
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+                document.getElementById('currentTitle').textContent = 'Error loading settings';
+                document.getElementById('currentMessage').textContent = 'Error loading settings';
+                document.getElementById('currentDays').textContent = 'Error loading settings';
+                
+                // Set default values
+                document.getElementById('title').value = '🎉 SPECIAL OFFER! 🎉';
+                document.getElementById('message').value = 'Buy 1 Get the 2nd 40% Off';
+                document.getElementById('days').value = 'Every Thursday & Friday on All Vapes';
+                updatePreview();
+            }
+        }
+
+        // Update preview in real-time
+        function updatePreview() {
+            const title = document.getElementById('title').value || '🎉 SPECIAL OFFER! 🎉';
+            const message = document.getElementById('message').value || 'Buy 1 Get the 2nd 40% Off';
+            const days = document.getElementById('days').value || 'Every Thursday & Friday on All Vapes';
+            
+            document.getElementById('previewTitle').textContent = title;
+            document.getElementById('previewMessage').textContent = message;
+            document.getElementById('previewDays').textContent = days;
+        }
+
+        // Handle form submission
+        document.getElementById('announcementForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const message = document.getElementById('message').value;
+            const days = document.getElementById('days').value;
+            
+            try {
+                const announcementData = {
+                    title: title,
+                    message: message,
+                    days: days,
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Generate the JSON content for download
+                const jsonContent = JSON.stringify(announcementData, null, 2);
+                
+                // Create and download the file
+                const blob = new Blob([jsonContent], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'admin.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Update current settings display
+                document.getElementById('currentTitle').textContent = title;
+                document.getElementById('currentMessage').textContent = message;
+                document.getElementById('currentDays').textContent = days;
+                
+                // Show success message with instructions
+                showMessage('success', 'File downloaded! Upload admin.json to your GitHub repository to update the announcement.');
+                
+                // Update preview
+                updatePreview();
+                
+            } catch (error) {
+                console.error('Error saving announcement:', error);
+                showMessage('error');
+            }
+        });
+
+        // Add real-time preview updates
+        document.getElementById('title').addEventListener('input', updatePreview);
+        document.getElementById('message').addEventListener('input', updatePreview);
+        document.getElementById('days').addEventListener('input', updatePreview);
+
+        // Show success/error messages
+        function showMessage(type, customMessage = null) {
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            
+            if (type === 'success') {
+                if (customMessage) {
+                    successMsg.innerHTML = `<i class="fas fa-check-circle"></i> ${customMessage}`;
+                }
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 5000);
+            } else {
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+                setTimeout(() => {
+                    errorMsg.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('announcementForm').reset();
+            updatePreview();
+        }
+
+        // Clear announcement
+        function clearAnnouncement() {
+            if (confirm('Are you sure you want to clear the announcement?')) {
+                const clearData = {
+                    title: "",
+                    message: "",
+                    days: "",
+                    timestamp: new Date().toISOString()
+                };
+                
+                const jsonContent = JSON.stringify(clearData, null, 2);
+                const blob = new Blob([jsonContent], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'admin.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showMessage('success', 'Clear file downloaded! Upload admin.json to your GitHub repository to remove the announcement.');
+            }
+        }
+
+        // Go to website
+        function goToWebsite() {
+            window.open('index.html', '_blank');
+        }
+
+        // Load settings when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCurrentSettings();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/announcement.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/announcement",
+      "dest": "/api/announcement.js"
+    }
+  ]
+}

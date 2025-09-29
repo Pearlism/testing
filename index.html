@@ -1105,9 +1105,9 @@
   <!-- Announcement Popup -->
   <div class="popup-overlay" id="popupOverlay" style="display: none;"></div>
   <div class="announcement-popup" id="announcementPopup" style="display: none;">
-    <div class="announcement-title">🎉 SPECIAL OFFER! 🎉</div>
-    <div class="announcement-message">Buy 1 Get the 2nd 40% Off</div>
-    <div class="announcement-days">Every Thursday & Friday on All Vapes</div>
+    <div class="announcement-title" id="announcementTitle">🎉 SPECIAL OFFER! 🎉</div>
+    <div class="announcement-message" id="announcementMessage">Buy 1 Get the 2nd 40% Off</div>
+    <div class="announcement-days" id="announcementDays">Every Thursday & Friday on All Vapes</div>
     <button class="announcement-close" onclick="closeAnnouncement()">Got It!</button>
   </div>
 
@@ -1232,9 +1232,45 @@
       }, 1000);
     }
 
-    function showAnnouncement() {
+    async function loadAnnouncementData() {
+      try {
+        // Try Vercel API first
+        const response = await fetch('/api/announcement');
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('announcementTitle').textContent = data.title || '🎉 SPECIAL OFFER! 🎉';
+          document.getElementById('announcementMessage').textContent = data.message || 'Buy 1 Get the 2nd 40% Off';
+          document.getElementById('announcementDays').textContent = data.days || 'Every Thursday & Friday on All Vapes';
+        } else {
+          // Fallback to JSON file for GitHub Pages
+          const fallbackResponse = await fetch('admin.json');
+          if (fallbackResponse.ok) {
+            const data = await fallbackResponse.json();
+            document.getElementById('announcementTitle').textContent = data.title || '🎉 SPECIAL OFFER! 🎉';
+            document.getElementById('announcementMessage').textContent = data.message || 'Buy 1 Get the 2nd 40% Off';
+            document.getElementById('announcementDays').textContent = data.days || 'Every Thursday & Friday on All Vapes';
+          } else {
+            // Use default values if both fail
+            document.getElementById('announcementTitle').textContent = '🎉 SPECIAL OFFER! 🎉';
+            document.getElementById('announcementMessage').textContent = 'Buy 1 Get the 2nd 40% Off';
+            document.getElementById('announcementDays').textContent = 'Every Thursday & Friday on All Vapes';
+          }
+        }
+      } catch (error) {
+        console.error('Error loading announcement data:', error);
+        // Use default values on error
+        document.getElementById('announcementTitle').textContent = '🎉 SPECIAL OFFER! 🎉';
+        document.getElementById('announcementMessage').textContent = 'Buy 1 Get the 2nd 40% Off';
+        document.getElementById('announcementDays').textContent = 'Every Thursday & Friday on All Vapes';
+      }
+    }
+
+    async function showAnnouncement() {
       const announcementPopup = document.getElementById('announcementPopup');
       const popupOverlay = document.getElementById('popupOverlay');
+      
+      // Load announcement data before showing
+      await loadAnnouncementData();
       
       announcementPopup.style.display = 'block';
       popupOverlay.style.display = 'block';
