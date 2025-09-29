@@ -9,8 +9,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files with proper headers
+// Serve static files with proper headers - try multiple paths
 app.use(express.static(__dirname, {
+  setHeaders: (res, path) => {
+    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
+
+app.use(express.static(process.cwd(), {
   setHeaders: (res, path) => {
     if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
       res.setHeader('Cache-Control', 'public, max-age=31536000');
@@ -154,19 +162,52 @@ app.get('/offstamp', (req, res) => {
   res.sendFile(path.join(__dirname, 'offstamp.html'));
 });
 
+// Debug route to list files
+app.get('/debug/files', (req, res) => {
+  try {
+    const files = fs.readdirSync(__dirname).filter(file => 
+      file.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)
+    );
+    res.json({
+      dirname: __dirname,
+      cwd: process.cwd(),
+      imageFiles: files,
+      allFiles: fs.readdirSync(__dirname)
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
 // Serve image files explicitly
 app.get(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/, (req, res) => {
-  const filePath = path.join(__dirname, req.path);
+  // Try multiple possible paths for Vercel
+  const possiblePaths = [
+    path.join(__dirname, req.path),
+    path.join(process.cwd(), req.path),
+    path.join(__dirname, '..', req.path),
+    path.join(process.cwd(), '..', req.path)
+  ];
   
   console.log(`Requesting image: ${req.path}`);
-  console.log(`File path: ${filePath}`);
-  console.log(`File exists: ${fs.existsSync(filePath)}`);
+  console.log(`__dirname: ${__dirname}`);
+  console.log(`process.cwd(): ${process.cwd()}`);
   
-  if (fs.existsSync(filePath)) {
+  let filePath = null;
+  for (const testPath of possiblePaths) {
+    console.log(`Testing path: ${testPath}`);
+    if (fs.existsSync(testPath)) {
+      filePath = testPath;
+      console.log(`Found image at: ${filePath}`);
+      break;
+    }
+  }
+  
+  if (filePath) {
     res.setHeader('Content-Type', getContentType(req.path));
     res.sendFile(filePath);
   } else {
-    console.log(`Image not found: ${filePath}`);
+    console.log(`Image not found in any path: ${req.path}`);
     res.status(404).send('Image not found');
   }
 });
