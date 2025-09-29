@@ -9,11 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files
-app.use(express.static(__dirname));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/css', express.static(path.join(__dirname, 'css')));
-app.use('/js', express.static(path.join(__dirname, 'js')));
+// Serve static files with proper headers
+app.use(express.static(__dirname, {
+  setHeaders: (res, path) => {
+    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }
+}));
 
 // Data file path
 const DATA_FILE = path.join(__dirname, 'announcement-data.json');
@@ -151,15 +154,54 @@ app.get('/offstamp', (req, res) => {
   res.sendFile(path.join(__dirname, 'offstamp.html'));
 });
 
-// Serve static files (images, etc.)
+// Serve image files explicitly
+app.get(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/, (req, res) => {
+  const filePath = path.join(__dirname, req.path);
+  
+  console.log(`Requesting image: ${req.path}`);
+  console.log(`File path: ${filePath}`);
+  console.log(`File exists: ${fs.existsSync(filePath)}`);
+  
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Type', getContentType(req.path));
+    res.sendFile(filePath);
+  } else {
+    console.log(`Image not found: ${filePath}`);
+    res.status(404).send('Image not found');
+  }
+});
+
+// Helper function to get content type
+function getContentType(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  const types = {
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.png': 'image/png',
+    '.gif': 'image/gif',
+    '.webp': 'image/webp',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon'
+  };
+  return types[ext] || 'application/octet-stream';
+}
+
+// Serve other static files
 app.get('*', (req, res, next) => {
   const filePath = path.join(__dirname, req.path);
+  
+  // Skip if it's an image (handled above) or if it's an HTML route
+  if (req.path.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/) || 
+      req.path.match(/\.(html|htm)$/) ||
+      req.path === '/') {
+    return next();
+  }
   
   // Check if file exists
   if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
     res.sendFile(filePath);
   } else {
-    next();
+    res.status(404).send('File not found');
   }
 });
 
