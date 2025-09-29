@@ -4,7 +4,6 @@ const fs = require('fs');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -91,16 +90,22 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 VapeCenter server running on port ${PORT}`);
-  console.log(`📱 Main website: http://localhost:${PORT}`);
-  console.log(`🔧 Admin panel: http://localhost:${PORT}/admin`);
-  console.log(`📊 API endpoint: http://localhost:${PORT}/api/announcement`);
-});
+// Export for Vercel
+module.exports = app;
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n👋 Shutting down server gracefully...');
-  process.exit(0);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`🚀 VapeCenter server running on port ${PORT}`);
+    console.log(`📱 Main website: http://localhost:${PORT}`);
+    console.log(`🔧 Admin panel: http://localhost:${PORT}/admin`);
+    console.log(`📊 API endpoint: http://localhost:${PORT}/api/announcement`);
+  });
+
+  // Graceful shutdown
+  process.on('SIGINT', () => {
+    console.log('\n👋 Shutting down server gracefully...');
+    process.exit(0);
+  });
+}
