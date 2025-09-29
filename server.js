@@ -12,9 +12,6 @@ app.use(express.json());
 // Serve static files
 app.use(express.static(__dirname));
 
-// Data file path
-const DATA_FILE = path.join(__dirname, 'announcement-data.json');
-
 // Default announcement data
 const defaultData = {
   title: "🎉 SPECIAL OFFER! 🎉",
@@ -23,61 +20,76 @@ const defaultData = {
   timestamp: new Date().toISOString()
 };
 
-// Read announcement data from file
+// In-memory storage for Vercel (since file system is read-only)
+let announcementData = { ...defaultData };
+
+// Read announcement data
 function readAnnouncementData() {
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const data = fs.readFileSync(DATA_FILE, 'utf8');
-      return JSON.parse(data);
-    }
-  } catch (error) {
-    console.error('Error reading announcement data:', error);
-  }
-  return defaultData;
+  return announcementData;
 }
 
-// Write announcement data to file
+// Write announcement data (in-memory only for Vercel)
 function writeAnnouncementData(data) {
   try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    announcementData = { ...data };
+    console.log('Announcement data updated in memory:', announcementData);
     return true;
   } catch (error) {
-    console.error('Error writing announcement data:', error);
+    console.error('Error updating announcement data:', error);
     return false;
   }
 }
 
 // API Routes
 app.get('/api/announcement', (req, res) => {
-  const data = readAnnouncementData();
-  res.json(data);
+  try {
+    const data = readAnnouncementData();
+    console.log('GET /api/announcement - returning:', data);
+    res.json(data);
+  } catch (error) {
+    console.error('Error in GET /api/announcement:', error);
+    res.status(500).json({ error: 'Failed to read announcement data' });
+  }
 });
 
 app.post('/api/announcement', (req, res) => {
-  const { title, message, days } = req.body;
-  
-  if (!title || !message || !days) {
-    return res.status(400).json({ 
-      error: 'Missing required fields: title, message, days' 
-    });
-  }
+  try {
+    console.log('POST /api/announcement - received:', req.body);
+    const { title, message, days } = req.body;
+    
+    if (!title || !message || !days) {
+      console.log('Missing required fields:', { title, message, days });
+      return res.status(400).json({ 
+        error: 'Missing required fields: title, message, days' 
+      });
+    }
 
-  const announcementData = {
-    title: title.trim(),
-    message: message.trim(),
-    days: days.trim(),
-    timestamp: new Date().toISOString()
-  };
+    const newAnnouncementData = {
+      title: title.trim(),
+      message: message.trim(),
+      days: days.trim(),
+      timestamp: new Date().toISOString()
+    };
 
-  if (writeAnnouncementData(announcementData)) {
-    res.json({
-      success: true,
-      message: 'Announcement updated successfully',
-      data: announcementData
-    });
-  } else {
+    console.log('Updating announcement data:', newAnnouncementData);
+
+    if (writeAnnouncementData(newAnnouncementData)) {
+      console.log('Announcement updated successfully');
+      res.json({
+        success: true,
+        message: 'Announcement updated successfully',
+        data: newAnnouncementData
+      });
+    } else {
+      console.error('Failed to write announcement data');
+      res.status(500).json({ 
+        error: 'Failed to save announcement data' 
+      });
+    }
+  } catch (error) {
+    console.error('Error in POST /api/announcement:', error);
     res.status(500).json({ 
-      error: 'Failed to save announcement data' 
+      error: 'Internal server error: ' + error.message 
     });
   }
 });
