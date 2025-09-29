@@ -1,13 +1,7 @@
-# Ignore development files
-node_modules/
+node_modules
+*.log
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
-
-# Ignore admin files for GitHub Pages (we're using Vercel version)
-admin.html
-admin.json
-
-# Ignore documentation
-README.md
