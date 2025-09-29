@@ -8,7 +8,12 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.'));
+
+// Serve static files
+app.use(express.static(__dirname));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
 
 // Data file path
 const DATA_FILE = path.join(__dirname, 'announcement-data.json');
@@ -80,14 +85,82 @@ app.post('/api/announcement', (req, res) => {
   }
 });
 
-// Serve the main website
+// Serve main HTML files
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Serve the admin panel
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+app.get('/products', (req, res) => {
+  res.sendFile(path.join(__dirname, 'products.html'));
+});
+
+app.get('/thcaproducts', (req, res) => {
+  res.sendFile(path.join(__dirname, 'thcaproducts.html'));
+});
+
+app.get('/vapedevices', (req, res) => {
+  res.sendFile(path.join(__dirname, 'vapedevices.html'));
+});
+
+app.get('/ejuice', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ejuice.html'));
+});
+
+app.get('/vaporizers', (req, res) => {
+  res.sendFile(path.join(__dirname, 'vaporizers.html'));
+});
+
+app.get('/topshelf', (req, res) => {
+  res.sendFile(path.join(__dirname, 'topshelf.html'));
+});
+
+// Serve individual brand pages
+app.get('/lostmarry', (req, res) => {
+  res.sendFile(path.join(__dirname, 'lostmarry.html'));
+});
+
+app.get('/north', (req, res) => {
+  res.sendFile(path.join(__dirname, 'north.html'));
+});
+
+app.get('/fogger', (req, res) => {
+  res.sendFile(path.join(__dirname, 'fogger.html'));
+});
+
+app.get('/geekbar', (req, res) => {
+  res.sendFile(path.join(__dirname, 'geekbar.html'));
+});
+
+app.get('/breeze', (req, res) => {
+  res.sendFile(path.join(__dirname, 'breeze.html'));
+});
+
+app.get('/ijoy', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ijoy.html'));
+});
+
+app.get('/razz', (req, res) => {
+  res.sendFile(path.join(__dirname, 'razz.html'));
+});
+
+app.get('/offstamp', (req, res) => {
+  res.sendFile(path.join(__dirname, 'offstamp.html'));
+});
+
+// Serve static files (images, etc.)
+app.get('*', (req, res, next) => {
+  const filePath = path.join(__dirname, req.path);
+  
+  // Check if file exists
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    res.sendFile(filePath);
+  } else {
+    next();
+  }
 });
 
 // Export for Vercel
