@@ -9,22 +9,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve static files with proper headers - try multiple paths
-app.use(express.static(__dirname, {
-  setHeaders: (res, path) => {
-    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
-    }
-  }
-}));
-
-app.use(express.static(process.cwd(), {
-  setHeaders: (res, path) => {
-    if (path.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=31536000');
-    }
-  }
-}));
+// Serve static files
+app.use(express.static(__dirname));
 
 // Data file path
 const DATA_FILE = path.join(__dirname, 'announcement-data.json');
@@ -179,38 +165,7 @@ app.get('/debug/files', (req, res) => {
   }
 });
 
-// Serve image files explicitly
-app.get(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/, (req, res) => {
-  // Try multiple possible paths for Vercel
-  const possiblePaths = [
-    path.join(__dirname, req.path),
-    path.join(process.cwd(), req.path),
-    path.join(__dirname, '..', req.path),
-    path.join(process.cwd(), '..', req.path)
-  ];
-  
-  console.log(`Requesting image: ${req.path}`);
-  console.log(`__dirname: ${__dirname}`);
-  console.log(`process.cwd(): ${process.cwd()}`);
-  
-  let filePath = null;
-  for (const testPath of possiblePaths) {
-    console.log(`Testing path: ${testPath}`);
-    if (fs.existsSync(testPath)) {
-      filePath = testPath;
-      console.log(`Found image at: ${filePath}`);
-      break;
-    }
-  }
-  
-  if (filePath) {
-    res.setHeader('Content-Type', getContentType(req.path));
-    res.sendFile(filePath);
-  } else {
-    console.log(`Image not found in any path: ${req.path}`);
-    res.status(404).send('Image not found');
-  }
-});
+// Images will be served by Vercel static files
 
 // Helper function to get content type
 function getContentType(filePath) {
@@ -227,23 +182,9 @@ function getContentType(filePath) {
   return types[ext] || 'application/octet-stream';
 }
 
-// Serve other static files
-app.get('*', (req, res, next) => {
-  const filePath = path.join(__dirname, req.path);
-  
-  // Skip if it's an image (handled above) or if it's an HTML route
-  if (req.path.match(/\.(jpg|jpeg|png|gif|webp|svg|ico)$/) || 
-      req.path.match(/\.(html|htm)$/) ||
-      req.path === '/') {
-    return next();
-  }
-  
-  // Check if file exists
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send('File not found');
-  }
+// Handle 404 for unmatched routes
+app.get('*', (req, res) => {
+  res.status(404).send('Page not found');
 });
 
 // Export for Vercel
