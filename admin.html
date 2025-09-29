@@ -117,6 +117,12 @@
             box-shadow: 0 8px 20px rgba(0, 212, 255, 0.3);
         }
 
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-secondary {
             background: linear-gradient(45deg, #666, #888);
             color: #fff;
@@ -168,6 +174,15 @@
 
         .error-message {
             background: linear-gradient(45deg, #ef4444, #f87171);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .loading-message {
+            background: linear-gradient(45deg, #f59e0b, #fbbf24);
             color: #fff;
             padding: 15px 20px;
             border-radius: 10px;
@@ -234,6 +249,24 @@
             cursor: pointer;
         }
 
+        .server-info {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .server-info h3 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .server-info p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px 10px;
@@ -258,7 +291,7 @@
     <div class="container">
         <div class="header">
             <h1>Admin Panel</h1>
-            <p>Manage your website announcements</p>
+            <p>VapeCenter Tiffin Ave</p>
         </div>
 
         <div class="success-message" id="successMessage">
@@ -267,6 +300,15 @@
 
         <div class="error-message" id="errorMessage">
             <i class="fas fa-exclamation-circle"></i> Error updating announcement. Please try again.
+        </div>
+
+        <div class="loading-message" id="loadingMessage">
+            <i class="fas fa-spinner fa-spin"></i> Updating announcement...
+        </div>
+
+        <div class="server-info">
+            <h3><i class="fas fa-server"></i> change yur announcement here </h3>
+            <p>i think this is self explanatory an i think you know what to do i hope </p>
         </div>
 
         <div class="current-settings">
@@ -303,7 +345,7 @@
                     <textarea id="days" name="days" placeholder="Enter additional details (e.g., Every Thursday & Friday on All Vapes)" required></textarea>
                 </div>
 
-                <button type="submit" class="btn">
+                <button type="submit" class="btn" id="submitBtn">
                     <i class="fas fa-save"></i> Update Announcement
                 </button>
                 <button type="button" class="btn btn-secondary" onclick="resetForm()">
@@ -323,21 +365,6 @@
         </div>
 
         <div class="admin-card">
-            <h3><i class="fas fa-info-circle"></i> How to Update Your Website</h3>
-            <div style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 10px; padding: 20px; margin-bottom: 20px;">
-                <h4 style="color: #00d4ff; margin-bottom: 15px;">📋 Steps to Update Your Announcement:</h4>
-                <ol style="color: #fff; line-height: 1.6; padding-left: 20px;">
-                    <li style="margin-bottom: 8px;">Fill out the form above with your new announcement</li>
-                    <li style="margin-bottom: 8px;">Click "Update Announcement" to download the admin.json file</li>
-                    <li style="margin-bottom: 8px;">Go to your GitHub repository</li>
-                    <li style="margin-bottom: 8px;">Upload the downloaded admin.json file (replace the existing one)</li>
-                    <li style="margin-bottom: 8px;">Commit and push the changes</li>
-                    <li>Your website will automatically update within a few minutes!</li>
-                </ol>
-            </div>
-        </div>
-
-        <div class="admin-card">
             <h3><i class="fas fa-tools"></i> Quick Actions</h3>
             <button class="btn" onclick="goToWebsite()">
                 <i class="fas fa-external-link-alt"></i> View Website
@@ -349,10 +376,10 @@
     </div>
 
     <script>
-        // Load current announcement settings from JSON file
+        // Load current announcement settings from API
         async function loadCurrentSettings() {
             try {
-                const response = await fetch('admin.json');
+                const response = await fetch('/api/announcement');
                 if (response.ok) {
                     const data = await response.json();
                     document.getElementById('currentTitle').textContent = data.title || 'No title set';
@@ -367,7 +394,7 @@
                     // Update preview
                     updatePreview();
                 } else {
-                    throw new Error('Failed to load admin.json');
+                    throw new Error('Failed to load announcement data');
                 }
             } catch (error) {
                 console.error('Error loading settings:', error);
@@ -395,49 +422,55 @@
         }
 
         // Handle form submission
-        document.getElementById('announcementForm').addEventListener('submit', function(e) {
+        document.getElementById('announcementForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const title = document.getElementById('title').value;
             const message = document.getElementById('message').value;
             const days = document.getElementById('days').value;
             
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            
+            showMessage('loading');
+            
             try {
-                const announcementData = {
-                    title: title,
-                    message: message,
-                    days: days,
-                    timestamp: new Date().toISOString()
-                };
+                const response = await fetch('/api/announcement', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        message: message,
+                        days: days
+                    })
+                });
                 
-                // Generate the JSON content for download
-                const jsonContent = JSON.stringify(announcementData, null, 2);
-                
-                // Create and download the file
-                const blob = new Blob([jsonContent], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'admin.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                // Update current settings display
-                document.getElementById('currentTitle').textContent = title;
-                document.getElementById('currentMessage').textContent = message;
-                document.getElementById('currentDays').textContent = days;
-                
-                // Show success message with instructions
-                showMessage('success', 'File downloaded! Upload admin.json to your GitHub repository to update the announcement.');
-                
-                // Update preview
-                updatePreview();
-                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Update current settings display
+                    document.getElementById('currentTitle').textContent = title;
+                    document.getElementById('currentMessage').textContent = message;
+                    document.getElementById('currentDays').textContent = days;
+                    
+                    // Show success message
+                    showMessage('success', 'Announcement updated successfully! Your website will show the new announcement immediately.');
+                    
+                    // Update preview
+                    updatePreview();
+                } else {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to update announcement');
+                }
             } catch (error) {
                 console.error('Error saving announcement:', error);
-                showMessage('error');
+                showMessage('error', `Failed to update announcement: ${error.message}`);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save"></i> Update Announcement';
             }
         });
 
@@ -446,26 +479,35 @@
         document.getElementById('message').addEventListener('input', updatePreview);
         document.getElementById('days').addEventListener('input', updatePreview);
 
-        // Show success/error messages
+        // Show success/error/loading messages
         function showMessage(type, customMessage = null) {
             const successMsg = document.getElementById('successMessage');
             const errorMsg = document.getElementById('errorMessage');
+            const loadingMsg = document.getElementById('loadingMessage');
+            
+            // Hide all messages first
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            loadingMsg.style.display = 'none';
             
             if (type === 'success') {
                 if (customMessage) {
                     successMsg.innerHTML = `<i class="fas fa-check-circle"></i> ${customMessage}`;
                 }
                 successMsg.style.display = 'block';
-                errorMsg.style.display = 'none';
                 setTimeout(() => {
                     successMsg.style.display = 'none';
                 }, 5000);
-            } else {
+            } else if (type === 'error') {
+                if (customMessage) {
+                    errorMsg.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${customMessage}`;
+                }
                 errorMsg.style.display = 'block';
-                successMsg.style.display = 'none';
                 setTimeout(() => {
                     errorMsg.style.display = 'none';
-                }, 3000);
+                }, 5000);
+            } else if (type === 'loading') {
+                loadingMsg.style.display = 'block';
             }
         }
 
@@ -476,33 +518,38 @@
         }
 
         // Clear announcement
-        function clearAnnouncement() {
+        async function clearAnnouncement() {
             if (confirm('Are you sure you want to clear the announcement?')) {
-                const clearData = {
-                    title: "",
-                    message: "",
-                    days: "",
-                    timestamp: new Date().toISOString()
-                };
-                
-                const jsonContent = JSON.stringify(clearData, null, 2);
-                const blob = new Blob([jsonContent], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'admin.json';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showMessage('success', 'Clear file downloaded! Upload admin.json to your GitHub repository to remove the announcement.');
+                try {
+                    const response = await fetch('/api/announcement', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            title: "",
+                            message: "",
+                            days: ""
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        loadCurrentSettings();
+                        resetForm();
+                        showMessage('success', 'Announcement cleared successfully!');
+                    } else {
+                        throw new Error('Failed to clear announcement');
+                    }
+                } catch (error) {
+                    console.error('Error clearing announcement:', error);
+                    showMessage('error', 'Failed to clear announcement. Please try again.');
+                }
             }
         }
 
         // Go to website
         function goToWebsite() {
-            window.open('index.html', '_blank');
+            window.open('/', '_blank');
         }
 
         // Load settings when page loads

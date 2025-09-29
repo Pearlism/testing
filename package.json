@@ -2,11 +2,11 @@
   "name": "vapestore-website",
   "version": "1.0.0",
   "description": "VapeCenter Tiffin Ave - Vape Store Website",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "echo 'Static site - no build needed'",
-    "start": "echo 'Static site - serve with any static server'"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'No build needed for Node.js server'"
   },
   "keywords": [
     "vape",
@@ -16,7 +16,8 @@
   ],
   "author": "VapeCenter Tiffin Ave",
   "license": "MIT",
-  "devDependencies": {
-    "vercel": "^32.0.0"
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
   }
 }
