@@ -12,6 +12,31 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files
 app.use(express.static(__dirname));
 
+// Serve images with proper headers
+app.get('*.{png,jpg,jpeg,gif,svg,ico,webp}', (req, res) => {
+  const imagePath = path.join(__dirname, req.path);
+  const ext = path.extname(req.path).toLowerCase();
+  
+  const contentTypes = {
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon',
+    '.webp': 'image/webp'
+  };
+  
+  res.setHeader('Content-Type', contentTypes[ext] || 'application/octet-stream');
+  res.setHeader('Cache-Control', 'public, max-age=31536000');
+  res.sendFile(imagePath, (err) => {
+    if (err) {
+      console.log(`Image not found: ${req.path}`);
+      res.status(404).send('Image not found');
+    }
+  });
+});
+
 // Default announcement data
 const defaultData = {
   title: "🎉 SPECIAL OFFER! 🎉",
