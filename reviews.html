@@ -880,24 +880,24 @@
                     <div class="form-group">
                         <label>Rating *</label>
                         <div class="star-rating">
-                            <input type="radio" id="star5" name="rating" value="5" required>
-                            <label for="star5" class="star-label" data-rating="5">
-                                <i class="fas fa-star"></i>
-                            </label>
-                            <input type="radio" id="star4" name="rating" value="4" required>
-                            <label for="star4" class="star-label" data-rating="4">
-                                <i class="fas fa-star"></i>
-                            </label>
-                            <input type="radio" id="star3" name="rating" value="3" required>
-                            <label for="star3" class="star-label" data-rating="3">
+                            <input type="radio" id="star1" name="rating" value="1" required>
+                            <label for="star1" class="star-label" data-rating="1">
                                 <i class="fas fa-star"></i>
                             </label>
                             <input type="radio" id="star2" name="rating" value="2" required>
                             <label for="star2" class="star-label" data-rating="2">
                                 <i class="fas fa-star"></i>
                             </label>
-                            <input type="radio" id="star1" name="rating" value="1" required>
-                            <label for="star1" class="star-label" data-rating="1">
+                            <input type="radio" id="star3" name="rating" value="3" required>
+                            <label for="star3" class="star-label" data-rating="3">
+                                <i class="fas fa-star"></i>
+                            </label>
+                            <input type="radio" id="star4" name="rating" value="4" required>
+                            <label for="star4" class="star-label" data-rating="4">
+                                <i class="fas fa-star"></i>
+                            </label>
+                            <input type="radio" id="star5" name="rating" value="5" required>
+                            <label for="star5" class="star-label" data-rating="5">
                                 <i class="fas fa-star"></i>
                             </label>
                         </div>
@@ -998,12 +998,14 @@
                 const rating = parseInt(this.getAttribute('data-rating'));
                 ratingText.textContent = ratingTexts[rating];
                 
-                // Update visual feedback
+                // Update visual feedback - stars are now ordered 1,2,3,4,5 from left to right
                 starLabels.forEach((starLabel, starIndex) => {
                     if (starIndex < rating) {
                         starLabel.style.color = '#ffd700';
+                        starLabel.classList.add('selected');
                     } else {
                         starLabel.style.color = '#555';
+                        starLabel.classList.remove('selected');
                     }
                 });
             });
@@ -1019,6 +1021,7 @@
             ratingText.textContent = 'Click to rate';
             starLabels.forEach(starLabel => {
                 starLabel.style.color = '#555';
+                starLabel.classList.remove('selected');
             });
         });
 
