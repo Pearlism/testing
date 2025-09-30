@@ -1042,31 +1042,33 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
 
             try {
-                const formData = new FormData();
-                formData.append('reviewerName', document.getElementById('reviewerName').value);
-                formData.append('reviewTitle', document.getElementById('reviewTitle').value);
-                formData.append('reviewDescription', document.getElementById('reviewDescription').value);
-                
                 // Get rating value
                 const ratingInput = document.querySelector('input[name="rating"]:checked');
                 const rating = ratingInput ? ratingInput.value : '5';
-                formData.append('rating', rating);
                 
-                // File upload disabled for Vercel deployment
-                // if (fileInput.files.length > 0) {
-                //     formData.append('reviewImage', fileInput.files[0]);
-                // }
+                const reviewData = {
+                    reviewerName: document.getElementById('reviewerName').value,
+                    reviewTitle: document.getElementById('reviewTitle').value,
+                    reviewDescription: document.getElementById('reviewDescription').value,
+                    rating: rating
+                };
 
                 const response = await fetch('/api/reviews', {
                     method: 'POST',
-                    body: formData
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(reviewData)
                 });
 
                 if (response.ok) {
                     successMessage.style.display = 'block';
                     reviewForm.reset();
-                    fileLabel.textContent = 'Click to upload a photo';
-                    document.querySelector('.file-input-label').classList.remove('file-selected');
+                    
+                    // Reset star rating display
+                    document.getElementById('ratingText').textContent = 'Click to rate';
+                    const starLabels = document.querySelectorAll('.star-label');
+                    starLabels.forEach(label => label.classList.remove('selected'));
                     
                     // Reload reviews
                     loadReviews();
