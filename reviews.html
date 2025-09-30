@@ -909,6 +909,8 @@
                         <textarea id="reviewDescription" name="reviewDescription" placeholder="Tell us about your experience with our products..." required></textarea>
                     </div>
 
+                    <!-- Photo upload temporarily disabled for Vercel deployment -->
+                    <!-- 
                     <div class="form-group">
                         <label for="reviewImage">Photo (Optional)</label>
                         <div class="file-input-wrapper">
@@ -919,6 +921,7 @@
                             </label>
                         </div>
                     </div>
+                    -->
 
                     <div class="loading" id="loadingIndicator">
                         <div class="spinner"></div>
@@ -1047,9 +1050,10 @@
                 const rating = ratingInput ? ratingInput.value : '5';
                 formData.append('rating', rating);
                 
-                if (fileInput.files.length > 0) {
-                    formData.append('reviewImage', fileInput.files[0]);
-                }
+                // File upload disabled for Vercel deployment
+                // if (fileInput.files.length > 0) {
+                //     formData.append('reviewImage', fileInput.files[0]);
+                // }
 
                 const response = await fetch('/api/reviews', {
                     method: 'POST',
