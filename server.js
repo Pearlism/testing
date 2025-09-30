@@ -2,12 +2,38 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
+const multer = require('multer');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, __dirname + '/uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, 'review-' + uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ 
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed'), false);
+    }
+  }
+});
 
 // Serve static files
 app.use(express.static(__dirname));
@@ -22,6 +48,7 @@ const defaultData = {
 
 // In-memory storage for Vercel (since file system is read-only)
 let announcementData = { ...defaultData };
+let reviewsData = [];
 
 // Read announcement data
 function readAnnouncementData() {
@@ -94,6 +121,106 @@ app.post('/api/announcement', (req, res) => {
   }
 });
 
+// Reviews API Routes
+app.get('/api/reviews', (req, res) => {
+  try {
+    console.log('GET /api/reviews - returning reviews:', reviewsData.length);
+    res.json(reviewsData);
+  } catch (error) {
+    console.error('Error in GET /api/reviews:', error);
+    res.status(500).json({ error: 'Failed to fetch reviews' });
+  }
+});
+
+app.post('/api/reviews', upload.single('reviewImage'), (req, res) => {
+  try {
+    console.log('POST /api/reviews - received:', req.body);
+    const { reviewerName, reviewTitle, reviewDescription, rating } = req.body;
+    
+    if (!reviewerName || !reviewTitle || !reviewDescription) {
+      console.log('Missing required fields:', { reviewerName, reviewTitle, reviewDescription });
+      return res.status(400).json({ 
+        error: 'Missing required fields: reviewerName, reviewTitle, reviewDescription' 
+      });
+    }
+
+    const newReview = {
+      id: Date.now().toString(),
+      reviewerName: reviewerName.trim(),
+      title: reviewTitle.trim(),
+      description: reviewDescription.trim(),
+      rating: parseInt(rating) || 5,
+      image: req.file ? `/uploads/${req.file.filename}` : null,
+      date: new Date().toISOString()
+    };
+
+    reviewsData.unshift(newReview); // Add to beginning of array
+    console.log('Review added successfully:', newReview);
+
+    res.json({
+      success: true,
+      message: 'Review submitted successfully',
+      review: newReview
+    });
+  } catch (error) {
+    console.error('Error in POST /api/reviews:', error);
+    res.status(500).json({ 
+      error: 'Internal server error: ' + error.message 
+    });
+  }
+});
+
+// Delete individual review
+app.delete('/api/reviews/:reviewId', (req, res) => {
+  try {
+    const { reviewId } = req.params;
+    console.log('DELETE /api/reviews/:reviewId - deleting review:', reviewId);
+    
+    const initialLength = reviewsData.length;
+    reviewsData = reviewsData.filter(review => review.id !== reviewId);
+    
+    if (reviewsData.length < initialLength) {
+      console.log('Review deleted successfully');
+      res.json({
+        success: true,
+        message: 'Review deleted successfully'
+      });
+    } else {
+      console.log('Review not found');
+      res.status(404).json({
+        error: 'Review not found'
+      });
+    }
+  } catch (error) {
+    console.error('Error in DELETE /api/reviews/:reviewId:', error);
+    res.status(500).json({
+      error: 'Internal server error: ' + error.message
+    });
+  }
+});
+
+// Delete all reviews
+app.delete('/api/reviews', (req, res) => {
+  try {
+    console.log('DELETE /api/reviews - clearing all reviews');
+    
+    const deletedCount = reviewsData.length;
+    reviewsData = [];
+    
+    console.log(`Cleared ${deletedCount} reviews`);
+    res.json({
+      success: true,
+      message: `All reviews cleared (${deletedCount} reviews deleted)`,
+      deletedCount
+    });
+  } catch (error) {
+    console.error('Error in DELETE /api/reviews:', error);
+    res.status(500).json({
+      error: 'Internal server error: ' + error.message
+    });
+  }
+});
+
 // Serve main HTML files
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
@@ -121,6 +248,10 @@ app.get('/ejuice', (req, res) => {
 
 app.get('/vaporizers', (req, res) => {
   res.sendFile(path.join(__dirname, 'vaporizers.html'));
+});
+
+app.get('/reviews', (req, res) => {
+  res.sendFile(path.join(__dirname, 'reviews.html'));
 });
 
 app.get('/topshelf', (req, res) => {
