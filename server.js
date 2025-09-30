@@ -10,19 +10,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, __dirname + '/uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'review-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
+// Configure multer for file uploads (memory storage for Vercel)
 const upload = multer({ 
-  storage: storage,
+  storage: multer.memoryStorage(), // Use memory storage for Vercel
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
   },
@@ -144,13 +134,15 @@ app.post('/api/reviews', upload.single('reviewImage'), (req, res) => {
       });
     }
 
+    // For Vercel deployment, we'll disable file uploads for now
+    // In production, you would upload to a cloud service like AWS S3, Cloudinary, etc.
     const newReview = {
       id: Date.now().toString(),
       reviewerName: reviewerName.trim(),
       title: reviewTitle.trim(),
       description: reviewDescription.trim(),
       rating: parseInt(rating) || 5,
-      image: req.file ? `/uploads/${req.file.filename}` : null,
+      image: null, // Disabled for Vercel deployment
       date: new Date().toISOString()
     };
 
