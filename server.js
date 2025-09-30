@@ -1,29 +1,13 @@
 const express = require('express');
 const path = require('path');
-const fs = require('fs');
 const cors = require('cors');
-const multer = require('multer');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Configure multer for file uploads (memory storage for Vercel)
-const upload = multer({ 
-  storage: multer.memoryStorage(), // Use memory storage for Vercel
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  },
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed'), false);
-    }
-  }
-});
+app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 app.use(express.static(__dirname));
@@ -122,7 +106,7 @@ app.get('/api/reviews', (req, res) => {
   }
 });
 
-app.post('/api/reviews', upload.single('reviewImage'), (req, res) => {
+app.post('/api/reviews', (req, res) => {
   try {
     console.log('POST /api/reviews - received:', req.body);
     const { reviewerName, reviewTitle, reviewDescription, rating } = req.body;
@@ -134,8 +118,6 @@ app.post('/api/reviews', upload.single('reviewImage'), (req, res) => {
       });
     }
 
-    // For Vercel deployment, we'll disable file uploads for now
-    // In production, you would upload to a cloud service like AWS S3, Cloudinary, etc.
     const newReview = {
       id: Date.now().toString(),
       reviewerName: reviewerName.trim(),
@@ -282,40 +264,6 @@ app.get('/razz', (req, res) => {
 app.get('/offstamp', (req, res) => {
   res.sendFile(path.join(__dirname, 'offstamp.html'));
 });
-
-// Debug route to list files
-app.get('/debug/files', (req, res) => {
-  try {
-    const files = fs.readdirSync(__dirname).filter(file => 
-      file.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)
-    );
-    res.json({
-      dirname: __dirname,
-      cwd: process.cwd(),
-      imageFiles: files,
-      allFiles: fs.readdirSync(__dirname)
-    });
-  } catch (error) {
-    res.json({ error: error.message });
-  }
-});
-
-// Images will be served by Vercel static files
-
-// Helper function to get content type
-function getContentType(filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  const types = {
-    '.jpg': 'image/jpeg',
-    '.jpeg': 'image/jpeg',
-    '.png': 'image/png',
-    '.gif': 'image/gif',
-    '.webp': 'image/webp',
-    '.svg': 'image/svg+xml',
-    '.ico': 'image/x-icon'
-  };
-  return types[ext] || 'application/octet-stream';
-}
 
 // Handle 404 for unmatched routes
 app.get('*', (req, res) => {
