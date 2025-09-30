@@ -963,7 +963,8 @@
             icon.className = navLinks.classList.contains('active') ? 'fas fa-times' : 'fas fa-bars';
         });
 
-        // File input handling
+        // File input handling - disabled for Vercel deployment
+        /*
         const fileInput = document.getElementById('reviewImage');
         const fileLabel = document.getElementById('fileLabel');
 
@@ -977,6 +978,7 @@
                 fileLabelElement.classList.remove('file-selected');
             }
         });
+        */
 
         // Star rating interaction
         const ratingText = document.getElementById('ratingText');
